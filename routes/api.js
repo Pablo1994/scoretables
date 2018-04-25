@@ -61,6 +61,7 @@ router.post('/leagues', function (req, res) {
 
     // Use connect method to connect to the database
     if (!debug) {
+        console.log("router.post leagues entro al if");
         MongoClient.connect(mongoURL, function (err, dbConnection) {
             assert.equal(null, err);
             console.log("Connected correctly to database");
@@ -96,6 +97,7 @@ router.post('/leagues', function (req, res) {
             });
         });
     } else {
+        console.log("router.post leagues se fue al else");
         var league = League.create(req.body.ID, req.body.Title, req.body.MatchDayAmount, req.body.Teams);
         genMatchDays(scoretablesdb, league)
     }
