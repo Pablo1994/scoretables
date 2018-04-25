@@ -45,7 +45,7 @@ router.get('/leagues/:id', function (req, res) {
         console.log("Connected correctly to database");
         const scoretablesdb = dbConnection.db(DATABASE_NAME);
 
-        findOneLeague(scoretablesdb, { "ID": parseInt(req.params.id) }, function (result) {
+        findOneLeague(scoretablesdb, { "ID": req.params.id }, function (result) {
             dbConnection.close();
             res.send(result);
         });
@@ -73,7 +73,9 @@ router.post('/leagues', function (req, res) {
 
         // Validate it doesn't exist already.
         findOneLeague(scoretablesdb, { "ID": req.body.ID }, function (result) {
-            if (result === null || result.length == 0) {
+            if (result.length == 0) {
+                var league = new League(req.body.ID, req.body.Title, req.body.MatchDayAmount, req.body.Teams);
+                //genMatchDays(league);
                 insertOneLeague(scoretablesdb, req.body, function (result) {
                     dbConnection.close();
                     res.statusCode = 201;
