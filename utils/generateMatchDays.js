@@ -1,4 +1,0 @@
-﻿
-var genMatchDays = function (league) {
-
-}

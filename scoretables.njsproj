@@ -41,9 +41,6 @@ DATABASE_NAME=scoretables</Environment>
     </Compile>
     <Compile Include="routes\api.js" />
     <Compile Include="routes\index.js" />
-    <Compile Include="utils\generateMatchDays.js">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="routes\users.js" />
     <Content Include=".env" />
     <Content Include="package.json" />
@@ -56,7 +53,6 @@ DATABASE_NAME=scoretables</Environment>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="models\" />
-    <Folder Include="utils\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />

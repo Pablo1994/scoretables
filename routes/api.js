@@ -73,13 +73,13 @@ router.post('/leagues', function (req, res) {
 
         // Validate it doesn't exist already.
         findOneLeague(scoretablesdb, { "ID": req.body.ID }, function (result) {
-            if (result.length == 0) {
-                var league = new League(req.body.ID, req.body.Title, req.body.MatchDayAmount, req.body.Teams);
-                //genMatchDays(league);
+            if (result.length == 0 || result == null) {
                 insertOneLeague(scoretablesdb, req.body, function (result) {
                     dbConnection.close();
                     res.statusCode = 201;
                     res.send(result);
+                    var league = League.create(req.body.ID, req.body.Title, req.body.MatchDayAmount, req.body.Teams);
+                    genMatchDays(league);
                 });
             }
             else {
@@ -90,6 +90,41 @@ router.post('/leagues', function (req, res) {
         });
     });
 });
+
+var genMatchDays = function (league) {
+    var leagueID = league.ID;
+    var MDAmount = league.MatchDayAmount;
+    var teams = league.teams;
+
+    for (var i = 1; i <= MDAmount; i++) {
+        var pairs = pairTeams(teams, leagueID, i);
+        insertMatches(pairs);
+    }
+}
+
+var pairTeams = function(teams, id, matchDay) {
+    if (teams.length < 2) { return []; }
+    var homeTeam = teams[0], awayTeams = list.slice(1),
+        matches = awayTeams.map(function (awayTeam) { return MatchDay.create(id, matchDay, homeTeam, awayTeam, null, null) });
+    return matches.concat(pairTeams(awayTeams, id, matchDay));
+}
+
+var insertMatches = function (matches) {
+    for (i = 0; i < matches.length; i++) {
+        insertOneMatch(matches[i]);
+    };
+}
+
+var insertOneMatch = function (match) {
+    // Get the matchdays collection.
+    var collection = scoretablesdb.collection(matchday_collection);
+
+    // Insert a document.
+    collection.insertOne(JSON.stringify(match), function (err, result) {
+        assert.equal(err, null);
+        callback(result);
+    });
+}
 
 var findOneLeague = function (scoretablesdb, filter, callback) {
     // Get the leagues collection.
