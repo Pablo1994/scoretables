@@ -32,6 +32,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="models\leaguemodule.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="models\matchdaymodule.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="routes\api.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\users.js" />
@@ -45,6 +51,7 @@
     <Content Include="views\error.pug" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="models\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
