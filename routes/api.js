@@ -73,7 +73,7 @@ router.post('/leagues', function (req, res) {
 
         // Validate it doesn't exist already.
         findOneLeague(scoretablesdb, { "ID": req.body.ID }, function (result) {
-            if (result.length == 0 || result == null) {
+            if (result == null || result.length == 0) {
                 insertOneLeague(scoretablesdb, req.body, function (result) {
                     dbConnection.close();
                     res.statusCode = 201;
