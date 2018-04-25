@@ -6,7 +6,8 @@
     <Name>scoretables</Name>
     <RootNamespace>scoretables</RootNamespace>
     <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
-    <Environment>MONGODB_URI=mongodb://fiscal:FiscalGeneral@ds251819.mlab.com:51819/scoretables</Environment>
+    <Environment>MONGODB_URI=mongodb://localhost:27017/scoretables
+DATABASE_NAME=scoretables</Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -32,6 +33,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="models\leaguemodule.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="models\matchdaymodule.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="routes\api.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\users.js" />
@@ -45,6 +52,7 @@
     <Content Include="views\error.pug" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="models\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />
