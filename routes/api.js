@@ -74,6 +74,8 @@ router.post('/leagues', function (req, res) {
         // Validate it doesn't exist already.
         findOneLeague(scoretablesdb, { "ID": req.body.ID }, function (result) {
             if (result.length == 0) {
+                var league = new League(req.body.ID, req.body.Title, req.body.MatchDayAmount, req.body.Teams);
+                //genMatchDays(league);
                 insertOneLeague(scoretablesdb, req.body, function (result) {
                     dbConnection.close();
                     res.statusCode = 201;
