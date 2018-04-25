@@ -81,7 +81,7 @@ router.post('/leagues', function (req, res) {
             findOneLeague(scoretablesdb, { "ID": league.ID }, function (result) {
                 if (result == null || result.length == 0) {
                     insertOneLeague(scoretablesdb, league, function (result) {
-                        genMatchDays(scoretablesdb, res, league);
+                        genMatchDays(scoretablesdb, league);
                         dbConnection.close();
                         res.statusCode = 201;
                         res.send(result);
@@ -96,11 +96,11 @@ router.post('/leagues', function (req, res) {
         });
     } else {
         var league = League.create(req.body.ID, req.body.Title, req.body.MatchDayAmount, req.body.Teams);
-        genMatchDays(scoretablesdb, res, league)
+        genMatchDays(scoretablesdb, league)
     }
 });
 
-var genMatchDays = function (scoretablesdb, res, league) {
+var genMatchDays = function (scoretablesdb, league) {
     var leagueID = league.ID;
     var MDAmount = league.MatchDayAmount;
     var teams = league.Teams;
@@ -111,7 +111,6 @@ var genMatchDays = function (scoretablesdb, res, league) {
         if (result == null) result = pairs; else result.concat(pairs);
         insertMatches(scoretablesdb, pairs);
     }
-    res.send(result);
 }
 
 var pairTeams = function(teams, id, matchDay) {
@@ -136,9 +135,9 @@ var insertOneMatch = function (scoretablesdb, match) {
     var collection = scoretablesdb.collection(matchday_collection);
 
     // Insert a document.
-    collection.insertOne(JSON.stringify(match), function (err, result) {
+    collection.insertOne(match, function (err, result) {
         assert.equal(err, null);
-        callback(result);
+        //callback(result);
     });
 }
 
