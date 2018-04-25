@@ -45,7 +45,7 @@ router.get('/leagues/:id', function (req, res) {
         console.log("Connected correctly to database");
         const scoretablesdb = dbConnection.db(DATABASE_NAME);
 
-        findOneLeague(scoretablesdb, { "ID": parseInt(req.params.id) }, function (result) {
+        findOneLeague(scoretablesdb, { "ID": req.params.id }, function (result) {
             dbConnection.close();
             res.send(result);
         });
