@@ -57,6 +57,7 @@ router.get('/leagues/:id', function (req, res) {
 
 /* POST a League. */
 router.post('/leagues', function (req, res) {
+    console.log("router.post leagues");
 
     // Use connect method to connect to the database
     if (!debug) {
