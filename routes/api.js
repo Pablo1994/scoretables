@@ -125,7 +125,7 @@ var pairTeams = function(teams, id, matchDay) {
 }
 
 var insertMatches = function (matches) {
-    for (i = 0; i < matches.length; i++) {
+    for (var i = 0; i < matches.length; i++) {
         insertOneMatch(matches[i]);
     };
 }
