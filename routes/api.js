@@ -75,14 +75,15 @@ router.post('/leagues', function (req, res) {
             assert.notEqual(req.body.Teams, null);
             assert.notEqual(req.body.Teams.length, 1);
 
+            var league = League.create(req.body.ID, req.body.Title, req.body.MatchDayAmount, req.body.Teams);
+
             // Validate it doesn't exist already.
-            findOneLeague(scoretablesdb, { "ID": req.body.ID }, function (result) {
+            findOneLeague(scoretablesdb, { "ID": league.ID }, function (result) {
                 if (result == null || result.length == 0) {
-                    insertOneLeague(scoretablesdb, req.body, function (result) {
+                    insertOneLeague(scoretablesdb, league, function (result) {
+                        genMatchDays(scoretablesdb, res, league);
                         dbConnection.close();
                         res.statusCode = 201;
-                        var league = League.create(req.body.ID, req.body.Title, req.body.MatchDayAmount, req.body.Teams);
-                        genMatchDays(scoretablesdb, res, league);
                         res.send(result);
                     });
                 }
