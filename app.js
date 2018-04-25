@@ -7,7 +7,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var assert = require('assert');
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var apiMethods = require('./routes/api');
@@ -74,12 +73,14 @@ var server = app.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + server.address().port);
 
     // Use connect method to connect to the Server
+
     MongoClient.connect(mongoURL, function (err, db) {
         assert.equal(null, err);
         console.log("Connected correctly to database");
 
         db.close();
     });
+
 
     console.log(`Worker ${process.pid} started`);
 });
