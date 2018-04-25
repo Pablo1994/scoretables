@@ -4,7 +4,7 @@ exports.MatchDay = {
         this.MatchDay = matchDay;
         this.HomeScore = homeScore;
         this.AwayScore = awayScore;
-        this.HomeTeam = HomeTeam;
+        this.HomeTeam = homeTeam;
         this.AwayTeam = awayTeam;
         this.updateDate = null;
         this.LeagueID = leagueid;
@@ -14,6 +14,6 @@ exports.MatchDay = {
 };
 
 /* Helper function to create an MatchDay object */
-exports.create = function (id, title, matchDayAmount, teams) {
+exports.create = function (leagueid, matchDay, homeTeam, awayTeam, homeScore, awayScore) {
     return Object.create(exports.MatchDay).init(leagueid, matchDay, homeTeam, awayTeam, homeScore, awayScore);
 };
