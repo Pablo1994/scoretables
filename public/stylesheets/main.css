@@ -6,3 +6,33 @@
 a {
     color: #00B7FF;
 }
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+th{
+	text-transform: uppercase;
+	background-color: #6ba229;
+	color: #fff;
+	height: 44;
+}
+
+.btn-primary{
+	background-color: #6ba229; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
