@@ -101,6 +101,7 @@ router.post('/leagues', function (req, res) {
 });
 
 var genMatchDays = function (scoretablesdb, league) {
+    console.log("genMatchDays, scoretablesdb: " + scoretablesdb);
     var leagueID = league.ID;
     var MDAmount = league.MatchDayAmount;
     var teams = league.Teams;
@@ -125,19 +126,20 @@ var pairTeams = function(teams, id, matchDay) {
 }
 
 var insertMatches = function (scoretablesdb, matches) {
+    console.log("insertMatches, scoretablesdb: " + scoretablesdb);
     for (var i = 0; i < matches.length; i++) {
         insertOneMatch(scoretablesdb, matches[i]);
     };
 }
 
 var insertOneMatch = function (scoretablesdb, match) {
+    console.log("insertOneMatch, scoretablesdb: " + scoretablesdb);
     // Get the matchdays collection.
     var collection = scoretablesdb.collection(matchday_collection);
 
     // Insert a document.
     collection.insertOne(match, function (err, result) {
         assert.equal(err, null);
-        //callback(result);
     });
 }
 
@@ -173,5 +175,9 @@ var insertOneLeague = function (scoretablesdb, document, callback) {
         callback(result);
     });
 }
+
+router.get("/table", function (req, res) {
+
+});
 
 module.exports = router;
