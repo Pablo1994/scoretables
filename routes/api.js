@@ -108,7 +108,7 @@ var genMatchDays = function (res, league) {
     for (var i = 1; i <= MDAmount; i++) {
         var pairs = pairTeams(teams, leagueID, i);
         if (result == null) result = pairs; else result.concat(pairs);
-        //insertMatches(pairs);
+        insertMatches(pairs);
     }
     res.send(result);
 }
