@@ -81,9 +81,9 @@ router.post('/leagues', function (req, res) {
                     insertOneLeague(scoretablesdb, req.body, function (result) {
                         dbConnection.close();
                         res.statusCode = 201;
-                        res.send(result);
                         var league = League.create(req.body.ID, req.body.Title, req.body.MatchDayAmount, req.body.Teams);
-                        genMatchDays(scoretablesdb, league);
+                        genMatchDays(scoretablesdb, res, league);
+                        res.send(result);
                     });
                 }
                 else {
