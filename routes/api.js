@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 const League = require('../models/leaguemodule');
 const MatchDay = require('../models/matchdaymodule');
+const TeamRow = require('../models/teamrowmodule');
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 const league_collection = 'leagues';
@@ -173,8 +174,25 @@ var insertOneLeague = function (scoretablesdb, document, callback) {
     });
 }
 
-router.get("/table", function (req, res) {
+router.get("/table/:id", function (req, res) {
+    console.log('Received id: ' + req.params.id);
 
+    var leagueID = req.params.id;
+    var league;
+    // Use connect method to connect to the database
+    MongoClient.connect(mongoURL, function (err, dbConnection) {
+        assert.equal(null, err);
+        console.log("Connected correctly to database");
+        const scoretablesdb = dbConnection.db(DATABASE_NAME);
+
+        findOneLeague(scoretablesdb, { "ID": req.params.id }, function (result) {
+            league = League.create(result.body.ID, result.body.Title, result.body.MatchDayAmount, result.body.Teams);
+        });
+
+
+
+        dbConnection.close();
+    });
 });
 
 module.exports = router;
