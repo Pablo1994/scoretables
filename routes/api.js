@@ -69,7 +69,7 @@ router.post('/leagues', function (req, res) {
         assert.notEqual(req.body.MatchDayAmount, 0);
         // Teams not null and greater than 1 team.
         assert.notEqual(req.body.Teams, null);
-        assert.notEqual(req.body.Teams.length, 1);
+        //assert.notEqual(req.body.Teams.length, 1);
 
         // Validate it doesn't exist already.
         findOneLeague(scoretablesdb, { "ID": req.body.ID }, function (result) {
