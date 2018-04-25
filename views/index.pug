@@ -1,5 +1,35 @@
 ﻿extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+
+	// Add team to league 
+	H1 Create league
+	form(action='#')
+		div.form-group
+			label(for='user') User:
+			input#name.form-control(type='text', name='user')
+		div.form-group
+			label(for='team') Team:
+			input#name.form-control(type='text', name='team')
+
+	button.btn.btn-primary(onclick='something()') Add
+
+
+	// League
+	H1= league.Title
+	if league
+		div(class='table-container' style='overflow-x:auto;')
+			table(style='width:100%', border='1')
+				th User
+				th= Team
+				for team in league[0].Teams
+					tr
+						td= team.ID
+						td= team.Team
+
+		script.
+			var something = function() {
+				console.log('auch!')
+			}
+	else
+		H1 Please, create a league first.

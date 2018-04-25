@@ -62,48 +62,45 @@ router.get('/leagues/:id', function (req, res) {
 
 /* POST a League. */
 router.post('/leagues', function (req, res) {
+    console.log("router.post leagues");
 
     // Use connect method to connect to the database
-    if (!debug) {
-        MongoClient.connect(mongoURL, function (err, dbConnection) {
-            assert.equal(null, err);
-            console.log("Connected correctly to database");
-            const scoretablesdb = dbConnection.db(DATABASE_NAME);
+    console.log("router.post leagues entro al if");
+    MongoClient.connect(mongoURL, function (err, dbConnection) {
+        assert.equal(null, err);
+        console.log("Connected correctly to database");
+        const scoretablesdb = dbConnection.db(DATABASE_NAME);
 
-            assert.notEqual(req.body, null);
-            assert.notEqual(req.body.ID, null);
-            assert.notEqual(req.body.Title, null);
-            // MatchDays greater than 0.
-            assert.notEqual(req.body.MatchDayAmount, null);
-            assert.notEqual(req.body.MatchDayAmount, 0);
-            // Teams not null and greater than 1 team.
-            assert.notEqual(req.body.Teams, null);
-            assert.notEqual(req.body.Teams.length, 1);
+        assert.notEqual(req.body, null);
+        assert.notEqual(req.body.ID, null);
+        assert.notEqual(req.body.Title, null);
+        // MatchDays greater than 0.
+        assert.notEqual(req.body.MatchDayAmount, null);
+        assert.notEqual(req.body.MatchDayAmount, 0);
+        // Teams not null and greater than 1 team.
+        assert.notEqual(req.body.Teams, null);
+        assert.notEqual(req.body.Teams.length, 1);
 
-            var league = League.create(req.body.ID, req.body.Title, req.body.MatchDayAmount, req.body.Teams);
-            const filter = { "ID": league.ID };
-
-            // Validate it doesn't exist already.
-            findOneLeague(scoretablesdb, filter, function (result) {
-                if (result == null || result.length == 0) {
-                    insertOneLeague(scoretablesdb, league, function (result) {
-                        genMatchDays(scoretablesdb, league);
-                        dbConnection.close();
-                        res.statusCode = 201;
-                        res.send(result);
-                    });
-                }
-                else {
-                    dbConnection.close();
-                    res.statusCode = 409;
-                    res.send("League already exists");
-                }
-            });
-        });
-    } else {
         var league = League.create(req.body.ID, req.body.Title, req.body.MatchDayAmount, req.body.Teams);
-        genMatchDays(scoretablesdb, league)
-    }
+        const filter = { "ID": league.ID };
+
+        // Validate it doesn't exist already.
+        findOneLeague(scoretablesdb, filter, function (result) {
+            if (result == null || result.length == 0) {
+                insertOneLeague(scoretablesdb, league, function (result) {
+                    genMatchDays(scoretablesdb, league);
+                    dbConnection.close();
+                    res.statusCode = 201;
+                    res.send(result);
+                });
+            }
+            else {
+                dbConnection.close();
+                res.statusCode = 409;
+                res.send("League already exists");
+            }
+        });
+    });
 });
 
 /* GET all MatchDays. */
@@ -211,6 +208,7 @@ router.put('/matchday/:id', function (req, res) {
 });
 
 var genMatchDays = function (scoretablesdb, league) {
+    console.log("genMatchDays, scoretablesdb: " + scoretablesdb);
     var leagueID = league.ID;
     var MDAmount = league.MatchDayAmount;
     var teams = league.Teams;
@@ -235,6 +233,7 @@ var pairTeams = function(teams, id, matchDay) {
 }
 
 var insertMatches = function (scoretablesdb, matches) {
+    console.log("insertMatches, scoretablesdb: " + scoretablesdb);
     for (var i = 0; i < matches.length; i++) {
         insertOneMatch(scoretablesdb, matches[i]);
     };
@@ -263,13 +262,13 @@ var findMatches = function (scoretablesdb, filter, callback) {
 }
 
 var insertOneMatch = function (scoretablesdb, match) {
+    console.log("insertOneMatch, scoretablesdb: " + scoretablesdb);
     // Get the matchdays collection.
     var collection = scoretablesdb.collection(matchday_collection);
 
     // Insert a document.
     collection.insertOne(match, function (err, result) {
         assert.equal(err, null);
-        callback(result);
     });
 }
 
@@ -316,5 +315,9 @@ var insertOneLeague = function (scoretablesdb, document, callback) {
         callback(result);
     });
 }
+
+router.get("/table", function (req, res) {
+
+});
 
 module.exports = router;
