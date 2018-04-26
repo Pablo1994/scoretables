@@ -16,20 +16,75 @@ block content
 
 
 	// League
-	H1= league.Title
+	H1 Teams
 	if league
 		div(class='table-container' style='overflow-x:auto;')
 			table(style='width:100%', border='1')
 				th User
-				th= Team
+				th Team
 				for team in league[0].Teams
 					tr
 						td= team.ID
 						td= team.Team
-
-		script.
-			var something = function() {
-				console.log('auch!')
-			}
 	else
 		H1 Please, create a league first.
+
+
+	// General Table
+	H1 General Table
+	if league
+		div(class='table-container' style='overflow-x:auto;')
+			table(style='width:100%', border='1')
+				th Team
+				th MD
+				th W
+				th D
+				th L
+				th F
+				th A
+				th +/-
+				th Pts
+				for team in league[0].Teams
+					tr
+						td name
+						td 0
+						td 0
+						td 0
+						td 0
+						td 0
+						td 0
+						td 0
+						td 0
+	else
+		H1 Please, create a league first.
+
+
+
+
+
+	// Schedule
+	H1 Schedule
+	if league
+		div(class='table-container' style='overflow-x:auto;')
+			table.schedule(style='width:100%')
+				th 
+				th 
+				th 
+				
+				for team in league[0].Teams
+					tr(style='border-bottom:#ccc solid 1px') 
+						td(style='text-align:right') Team 1
+						td(style='text-align:center') 0 - 0
+						td(style='text-align:left') Team 2
+						
+	else
+		H1 Please, create a league first.
+
+
+
+
+	// Scripts
+	script.
+		var something = function() {
+			console.log('auch!')
+		}

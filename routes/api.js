@@ -104,6 +104,31 @@ router.post('/leagues', function (req, res) {
     });
 });
 
+/* DELETE to delete a League. */
+router.delete('/leagues/:id', function (req, res) {
+
+    console.log('Received id: ' + req.params.id);
+
+    // Use connect method to connect to the database
+    MongoClient.connect(mongoURL, function (err, dbConnection) {
+        assert.equal(null, err);
+        console.log("Connected correctly to database");
+        const scoretablesdb = dbConnection.db(DATABASE_NAME);
+
+        const filter = { "ID": req.params.id };
+        const matchFilter = { "LeagueID": req.params.id };
+
+        deleteOneLeague(scoretablesdb, filter, function (result) {
+            console.log(result.n + " league document(s) deleted");
+            deleteMatches(scoretablesdb, matchFilter, function (result) {
+                console.log(result.n + " matchday document(s) deleted");
+                dbConnection.close();
+                res.send(result);
+            });
+        });
+    });
+});
+
 /* GET all MatchDays. */
 router.get('/matchdays', function (req, res) {
 
@@ -123,7 +148,7 @@ router.get('/matchdays', function (req, res) {
 });
 
 /* GET a League. */
-router.get('/matchday/:id', function (req, res) {
+router.get('/matchdays/:id', function (req, res) {
 
     console.log('Received id: ' + req.params.id);
 
@@ -186,7 +211,7 @@ router.get('/matchdays/:leagueid/:count', function (req, res) {
 });
 
 /* PUT to update a MatchDay. */
-router.put('/matchday/:id', function (req, res) {
+router.put('/matchdays/:id', function (req, res) {
 
     console.log('Received id: ' + req.params.id);
 
@@ -208,7 +233,52 @@ router.put('/matchday/:id', function (req, res) {
     });
 });
 
+ /* DELETE to delete a MatchDay. */
+router.delete('/matchdays/:id', function (req, res) {
+
+    console.log('Received id: ' + req.params.id);
+
+    // Use connect method to connect to the database
+    MongoClient.connect(mongoURL, function (err, dbConnection) {
+        assert.equal(null, err);
+        console.log("Connected correctly to database");
+        const scoretablesdb = dbConnection.db(DATABASE_NAME);
+
+        const o_id = new mongo.ObjectID(req.params.id);
+        const filter = { "_id": o_id };
+
+        deleteOneMatch(scoretablesdb, filter, function (result) {
+            dbConnection.close();
+            console.log(result.n + " document(s) deleted");
+            res.send(result);
+        });
+    });
+});
+
+
+/* DELETE to delete MatchDay by League ID. */
+router.delete('/matchdaysleague/:leagueid', function (req, res) {
+
+    console.log('Received leagueid: ' + req.params.leagueid);
+
+    // Use connect method to connect to the database
+    MongoClient.connect(mongoURL, function (err, dbConnection) {
+        assert.equal(null, err);
+        console.log("Connected correctly to database");
+        const scoretablesdb = dbConnection.db(DATABASE_NAME);
+
+        const filter = { "LeagueID": req.params.leagueid };
+
+        deleteMatches(scoretablesdb, filter, function (result) {
+            dbConnection.close();
+            console.log(result.n + " document(s) deleted");
+            res.send(result);
+        });
+    });
+});
+
 router.get("/scoretables/:id", function (req, res) {
+
     console.log('Received id: ' + req.params.id);
 
     // Use connect method to connect to the database
@@ -282,7 +352,7 @@ var insertMatches = function (scoretablesdb, matches) {
 }
 
 var findOneMatch = function (scoretablesdb, filter, callback) {
-    // Get the leagues collection.
+    // Get the matchdays collection.
     var collection = scoretablesdb.collection(matchday_collection);
 
     // Find some documents.
@@ -293,7 +363,7 @@ var findOneMatch = function (scoretablesdb, filter, callback) {
 }
 
 var findMatches = function (scoretablesdb, filter, callback) {
-    // Get the leagues collection.
+    // Get the matchdays collection.
     var collection = scoretablesdb.collection(matchday_collection);
 
     // Find some documents.
@@ -322,6 +392,30 @@ var updateOneMatch = function (scoretablesdb, filter, updateValues, callback) {
     collection.updateOne(filter, updateValues, function (err, result) {
         assert.equal(err, null);
         callback(result);
+    });
+}
+
+var deleteOneMatch = function (scoretablesdb, filter, callback) {
+    // Get the matchdays collection.
+    var collection = scoretablesdb.collection(matchday_collection);
+
+    // Delete one document.
+    collection.deleteOne(filter, function (err, obj) {
+        assert.equal(err, null);
+        console.log(obj.result.n + " document(s) deleted");
+        callback(obj.result);
+    });
+}
+
+var deleteMatches = function (scoretablesdb, filter, callback) {
+    // Get the matchdays collection.
+    var collection = scoretablesdb.collection(matchday_collection);
+
+    // Delete some documents.
+    collection.deleteMany(filter, function (err, obj) {
+        assert.equal(err, null);
+        console.log(obj.result.n + " document(s) deleted");
+        callback(obj.result);
     });
 }
 
@@ -357,6 +451,7 @@ var insertOneLeague = function (scoretablesdb, document, callback) {
         callback(result);
     });
 }
+
 
 var assignStats = function (teams, matches) {
     var teamRows = teams.map(function (team) { return TeamRow.create(team.ID, team.Team) });
@@ -432,6 +527,30 @@ var assignStats = function (teams, matches) {
         }
     });
     return teamRows;
+}
+
+var deleteOneLeague = function (scoretablesdb, filter, callback) {
+    // Get the leagues collection.
+    var collection = scoretablesdb.collection(league_collection);
+
+    // Delete one document.
+    collection.deleteOne(filter, function (err, obj) {
+        assert.equal(err, null);
+        console.log(obj.result.n + " document(s) deleted");
+        callback(obj.result);
+    });
+}
+
+var deleteLeagues = function (scoretablesdb, filter, callback) {
+    // Get the leagues collection.
+    var collection = scoretablesdb.collection(league_collection);
+
+    // Delete some documents.
+    collection.deleteMany(filter, function (err, obj) {
+        assert.equal(err, null);
+        console.log(obj.result.n + " document(s) deleted");
+        callback(obj.result);
+    });
 }
 
 module.exports = router;
