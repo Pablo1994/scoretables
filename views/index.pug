@@ -136,8 +136,10 @@ block content
 				// to JSON
 				teams = JSON.parse(teams);
 
-                var postArguments = { "ID":"testleague20", "Title":"Test League 1", "MatchDayAmount":5, "Teams": [ {"ID":"jarias", "Team": "Liverpool"}, {"ID":"snunez", "Team": "Man. City"}, {"ID":"snunez2", "Team": "Chelsea"}, {"ID":"snunez3", "Team": "Man. Utd"} ] }; 
-                //{ 'ID': title, 'Title': title, 'MatchDayAmount': parseInt(matchdayCount), 'Teams': teams };
+
+				var postArguments = { "ID":"testleague20", "Title":"Test League 1", "MatchDayAmount":5, "Teams": [ {"ID":"jarias", "Team": "Liverpool"}, {"ID":"snunez", "Team": "Man. City"}, {"ID":"snunez2", "Team": "Chelsea"}, {"ID":"snunez3", "Team": "Man. Utd"} ] };
+				//var postArguments = { 'ID': title, 'Title': title, 'MatchDayAmount': parseInt(matchdayCount), 'Teams': teams };
+
 				console.log('Create league post arguments: ' + JSON.stringify(postArguments));
 			
 				return $.ajax({
