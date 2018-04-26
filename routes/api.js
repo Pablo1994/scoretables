@@ -148,7 +148,7 @@ router.get('/matchdays', function (req, res) {
 });
 
 /* GET a League. */
-router.get('/matchdays/:id', function (req, res) {
+router.get('/matchday/:id', function (req, res) {
 
     console.log('Received id: ' + req.params.id);
 

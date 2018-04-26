@@ -49,6 +49,29 @@ function getScoreTables(leagueid) {
 
 }
 
+function getMatchDays(leagueid) {
+    // Setting URL and headers for request
+    var options = {
+        url: 'http://localhost:1337/api/matchdays/' + leagueid,
+        //proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
+        headers: {
+            'User-Agent': 'request'
+        }
+    };
+    // Return new promise 
+    return new Promise(function (resolve, reject) {
+        // Do async job
+        request.get(options, function (err, resp, body) {
+            if (err || !body) {
+                reject(err);
+            } else {
+                resolve(JSON.parse(body));
+            }
+        })
+    })
+
+}
+
 // GET home page. 
 router.get('/', function (req, res) {
 
@@ -85,14 +108,26 @@ router.get('/:id', function (req, res) {
         var getScoreTablesPromise = getScoreTables(req.params.id);
         getScoreTablesPromise.then(function (scores) {
 
-            // Success request, show league data.
-            res.render('index', {
-                title: "Score Table",
-                league: result,
-                scores: scores
-            });
+            var getMatchDaysPromise = getMatchDays(req.params.id);
+            getMatchDaysPromise.then(function (matchdays) {
+                // Success request, show league data.
+                res.render('index', {
+                    title: "Score Table",
+                    league: result,
+                    scores: scores,
+                    matchdays: matchdays
+                });
 
-            console.log("Successfully retrieved league data");
+                console.log("Successfully retrieved league data");
+            }, function (err) {
+                // Create league options.
+                res.render('index', {
+                    title: "Score Table",
+                    league: null
+                });
+
+                console.log(err);
+            })  
         }, function (err) {
             // Create league options.
             res.render('index', {
@@ -113,5 +148,6 @@ router.get('/:id', function (req, res) {
         })
 
 });
+
 
 module.exports = router;
