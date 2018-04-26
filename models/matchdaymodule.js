@@ -6,7 +6,7 @@ exports.MatchDay = {
         this.AwayScore = awayScore;
         this.HomeTeam = homeTeam;
         this.AwayTeam = awayTeam;
-        this.updateDate = null;
+        this.UpdateDate = null;
         this.LeagueID = leagueid;
 
         return this;
