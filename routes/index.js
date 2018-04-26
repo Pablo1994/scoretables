@@ -7,7 +7,7 @@ function getLeague(leagueid) {
     // Setting URL and headers for request
     var options = {
         url: 'http://localhost:1337/api/leagues/' + leagueid,
-        //proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
+       // proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
         headers: {
             'User-Agent': 'request'
         }
@@ -30,7 +30,7 @@ function getScoreTables(leagueid) {
     // Setting URL and headers for request
     var options = {
         url: 'http://localhost:1337/api/scoretables/' + leagueid,
-        //proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
+     //   proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
         headers: {
             'User-Agent': 'request'
         }
