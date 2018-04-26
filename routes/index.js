@@ -3,11 +3,11 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 
-function initialize(leagueid) {
+function getLeague(leagueid) {
     // Setting URL and headers for request
     var options = {
-        url: 'https://scoretables.herokuapp.com/api/leagues/' + leagueid,
-        proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
+        url: 'http://localhost:1337/api/leagues/' + leagueid,
+        //proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
         headers: {
             'User-Agent': 'request'
         }
@@ -26,6 +26,28 @@ function initialize(leagueid) {
 
 }
 
+function getScoreTables(leagueid) {
+    // Setting URL and headers for request
+    var options = {
+        url: 'http://localhost:1337/api/scoretables/' + leagueid,
+        //proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
+        headers: {
+            'User-Agent': 'request'
+        }
+    };
+    // Return new promise 
+    return new Promise(function (resolve, reject) {
+        // Do async job
+        request.get(options, function (err, resp, body) {
+            if (err || !body) {
+                reject(err);
+            } else {
+                resolve(JSON.parse(body));
+            }
+        })
+    })
+
+}
 
 // GET home page. 
 router.get('/', function (req, res) {
@@ -57,16 +79,29 @@ router.get('/:id', function (req, res) {
 
     console.log('Received id: ' + req.params.id);
 
-    var initializePromise = initialize(req.params.id);
-    initializePromise.then(function (result) {
+    var getLeaguePromise = getLeague(req.params.id);
+    getLeaguePromise.then(function (result) {
 
-        // Success request, show league data.
-        res.render('index', {
-            title: "Score Table",
-            league: result
-        });
+        var getScoreTablesPromise = getScoreTables(req.params.id);
+        getScoreTablesPromise.then(function (scores) {
 
-        console.log("Successfully retrieved league data");
+            // Success request, show league data.
+            res.render('index', {
+                title: "Score Table",
+                league: result,
+                scores: scores
+            });
+
+            console.log("Successfully retrieved league data");
+        }, function (err) {
+            // Create league options.
+            res.render('index', {
+                title: "Score Table",
+                league: null
+            });
+
+            console.log(err);
+        })
     }, function (err) {
         // Create league options.
         res.render('index', {
@@ -75,7 +110,8 @@ router.get('/:id', function (req, res) {
         });
 
         console.log(err);
-    })
+        })
+
 });
 
 module.exports = router;

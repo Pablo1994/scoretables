@@ -4,8 +4,8 @@ block content
 
  // League
  if league
-  H1 Teams
-  div(class='table-container' style='overflow-x:auto;')
+  //H1 Teams
+  //div(class='table-container' style='overflow-x:auto;')
    table(style='width:100%', border='1')
     th User
     th Team
@@ -26,11 +26,12 @@ block content
     //H1 Please, create a league first.
 
  // General Table
- if league
+ if scores
+  H1 General Table
   div(class='table-container' style='overflow-x:auto;')
    table(style='width:100%', border='1')
     th Team
-    th MD
+    th MP
     th W
     th D
     th L
@@ -38,17 +39,17 @@ block content
     th A
     th +/-
     th Pts
-    for team in league.Teams
+    for row in scores
      tr
-      td name
-      td 0
-      td 0
-      td 0
-      td 0
-      td 0
-      td 0
-      td 0
-      td 0
+      td= row.Name
+      td= row.PlayedMatches
+      td= row.Wins
+      td= row.Draws
+      td= row.Losses
+      td= row.GoalsInFavor
+      td= row.GoalsAgainst
+      td= row.GoalDifference
+      td= row.Points
  //else
   H1 Please, create a league first.
 
