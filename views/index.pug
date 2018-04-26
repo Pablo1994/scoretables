@@ -2,89 +2,74 @@
 
 block content
 
-	// Add team to league 
-	H1 Create league
-	form(action='#')
-		div.form-group
-			label(for='user') User:
-			input#name.form-control(type='text', name='user')
-		div.form-group
-			label(for='team') Team:
-			input#name.form-control(type='text', name='team')
+ // League
+ if league
+  //H1 Teams
+  //div(class='table-container' style='overflow-x:auto;')
+   table(style='width:100%', border='1')
+    th User
+    th Team
+    for team in league.Teams
+     tr
+      td= team.ID
+      td= team.Team
+ else
+  H1 Create League
+   form(action='#')
+    div.form-group
+     label(for='user') User:
+     input#name.form-control(type='text', name='user')
+    div.form-group
+     label(for='team') Team:
+     input#name.form-control(type='text', name='team')
+    button.btn.btn-primary(onclick='something()') Add
+    //H1 Please, create a league first.
 
-	button.btn.btn-primary(onclick='something()') Add
+ // General Table
+ if scores
+  H1 General Table
+  div(class='table-container' style='overflow-x:auto;')
+   table(style='width:100%', border='1')
+    th Team
+    th MP
+    th W
+    th D
+    th L
+    th F
+    th A
+    th +/-
+    th Pts
+    for row in scores
+     tr
+      td= row.Name
+      td= row.PlayedMatches
+      td= row.Wins
+      td= row.Draws
+      td= row.Losses
+      td= row.GoalsInFavor
+      td= row.GoalsAgainst
+      td= row.GoalDifference
+      td= row.Points
+ //else
+  H1 Please, create a league first.
 
-
-	// League
-	H1 Teams
-	if league
-		div(class='table-container' style='overflow-x:auto;')
-			table(style='width:100%', border='1')
-				th User
-				th Team
-				for team in league[0].Teams
-					tr
-						td= team.ID
-						td= team.Team
-	else
-		H1 Please, create a league first.
-
-
-	// General Table
-	H1 General Table
-	if league
-		div(class='table-container' style='overflow-x:auto;')
-			table(style='width:100%', border='1')
-				th Team
-				th MD
-				th W
-				th D
-				th L
-				th F
-				th A
-				th +/-
-				th Pts
-				for team in league[0].Teams
-					tr
-						td name
-						td 0
-						td 0
-						td 0
-						td 0
-						td 0
-						td 0
-						td 0
-						td 0
-	else
-		H1 Please, create a league first.
-
-
-
-
-
-	// Schedule
-	H1 Schedule
-	if league
-		div(class='table-container' style='overflow-x:auto;')
-			table.schedule(style='width:100%')
-				th 
-				th 
-				th 
-				
-				for team in league[0].Teams
-					tr(style='border-bottom:#ccc solid 1px') 
-						td(style='text-align:right') Team 1
-						td(style='text-align:center') 0 - 0
-						td(style='text-align:left') Team 2
+ // Schedule
+ if league
+  H1 Schedule
+   div(class='table-container' style='overflow-x:auto;')
+    table.schedule(style='width:100%')
+     th 
+     th 
+     th 			
+      for team in league.Teams
+       tr(style='border-bottom:#ccc solid 1px') 
+        td(style='text-align:right') Team 1
+        td(style='text-align:center') 0 - 0
+        td(style='text-align:left') Team 2
 						
-	else
-		H1 Please, create a league first.
+ //else
+  H1 Please, create a league first.
 
-
-
-
-	// Scripts
-	script.
-		var something = function() {
-			console.log('auch!')
-		}
+ // Scripts
+ script.
+  var something = function() { console.log('auch!') }
