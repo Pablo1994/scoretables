@@ -66,27 +66,35 @@ router.post('/leagues', function (req, res) {
     console.log("router.post leagues");
 
     // Use connect method to connect to the database
-    console.log("router.post leagues entro al if");
     MongoClient.connect(mongoURL, function (err, dbConnection) {
         assert.equal(null, err);
         console.log("Connected correctly to database");
         const scoretablesdb = dbConnection.db(DATABASE_NAME);
 
+        console.log("Value of Body: " + req.body);
         assert.notEqual(req.body, null);
+        console.log("Value of ID: " + req.body.ID);
         assert.notEqual(req.body.ID, null);
+        console.log("Value of Title: " + req.body.Title);
         assert.notEqual(req.body.Title, null);
+        console.log("Body, ID and Title are Fine!");
         // MatchDays greater than 0.
+        console.log("Value of MatchDayAmount: " + req.body.MatchDayAmount);
         assert.notEqual(req.body.MatchDayAmount, null);
         assert.notEqual(req.body.MatchDayAmount, 0);
+        console.log("MatchDayAmount is Fine!");
         // Teams not null and greater than 1 team.
+        console.log("Value of Teams: " + req.body.Teams);
         assert.notEqual(req.body.Teams, null);
         assert.notEqual(req.body.Teams.length, 1);
+        console.log("Teams are Fine!");
 
         var league = League.create(req.body.ID, req.body.Title, req.body.MatchDayAmount, req.body.Teams);
         const filter = { "ID": league.ID };
 
         // Validate it doesn't exist already.
         findOneLeague(scoretablesdb, filter, function (result) {
+            console.log("Found: " + result);
             if (result == null || result.length == 0) {
                 insertOneLeague(scoretablesdb, league, function (result) {
                     genMatchDays(scoretablesdb, league);
