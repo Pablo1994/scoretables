@@ -145,7 +145,7 @@ block content
 					type: "POST",
 					url: "https://scoretables.herokuapp.com/api/leagues",
 					data: jsonArguments,
-					dataType: "json",
+					contentType: "application/json",
 					success: function( respuesta ){
 						alert('success');
 					},
