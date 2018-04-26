@@ -71,7 +71,7 @@ router.post('/leagues', function (req, res) {
         console.log("Connected correctly to database");
         const scoretablesdb = dbConnection.db(DATABASE_NAME);
 
-        console.log("Value of Body: " + req.body);
+        console.log("Value of Body: " + JSON.stringify(req.body));
         assert.notEqual(req.body, null);
         console.log("Value of ID: " + req.body.ID);
         assert.notEqual(req.body.ID, null);
@@ -84,7 +84,7 @@ router.post('/leagues', function (req, res) {
         assert.notEqual(req.body.MatchDayAmount, 0);
         console.log("MatchDayAmount is Fine!");
         // Teams not null and greater than 1 team.
-        console.log("Value of Teams: " + req.body.Teams);
+        console.log("Value of Teams: " + JSON.stringify(req.body.Teams));
         assert.notEqual(req.body.Teams, null);
         assert.notEqual(req.body.Teams.length, 1);
         console.log("Teams are Fine!");
@@ -96,6 +96,7 @@ router.post('/leagues', function (req, res) {
         findOneLeague(scoretablesdb, filter, function (result) {
             console.log("Found: " + result);
             if (result == null || result.length == 0) {
+                console.log("Good!! Now we insert the League");
                 insertOneLeague(scoretablesdb, league, function (result) {
                     genMatchDays(scoretablesdb, league);
                     dbConnection.close();
