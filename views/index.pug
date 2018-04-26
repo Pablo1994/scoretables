@@ -168,6 +168,9 @@ block content
 				// to JSON
 				teams = JSON.parse(teams);
 
+				// to int
+				matchdayCount = parseInt(matchdayCount);
+
 				var postArguments = { 'ID': title, 'Title': title, 'MatchDayAmount': matchdayCount,	'Teams': teams };
 				console.log('Create league post arguments: ' + JSON.stringify(postArguments));
 
