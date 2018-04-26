@@ -125,7 +125,7 @@ block content
 			}
 		}
 
-		function createMatchDayFORMATRARE(){
+		function createMatchDay(){
 			var title = document.getElementById('matchdayName').value;
 			var matchdayCount = document.getElementById('matchdayCount').value;
 
@@ -136,16 +136,15 @@ block content
 				// to JSON
 				teams = JSON.parse(teams);
 
+				var postArguments = { 'ID': title, 'Title': title, 'MatchDayAmount': parseInt(matchdayCount), 'Teams': teams };
 
-				var postArguments = { "ID":"testleague20", "Title":"Test League 1", "MatchDayAmount":5, "Teams": [ {"ID":"jarias", "Team": "Liverpool"}, {"ID":"snunez", "Team": "Man. City"}, {"ID":"snunez2", "Team": "Chelsea"}, {"ID":"snunez3", "Team": "Man. Utd"} ] };
-				//var postArguments = { 'ID': title, 'Title': title, 'MatchDayAmount': parseInt(matchdayCount), 'Teams': teams };
+				var jsonArguments = JSON.stringify(postArguments);
+				console.log('Create league post arguments: ' + jsonArguments);
 
-				console.log('Create league post arguments: ' + JSON.stringify(postArguments));
-			
 				return $.ajax({
 					type: "POST",
 					url: "https://scoretables.herokuapp.com/api/leagues",
-					data: postArguments,
+					data: jsonArguments,
 					dataType: "json",
 					success: function( respuesta ){
 						alert('success');
@@ -157,43 +156,4 @@ block content
 			}
 		}
 
-		var createMatchDay = function(){
-			var title = document.getElementById('matchdayName').value;
-			var matchdayCount = document.getElementById('matchdayCount').value;
-
-			if(title != '' && matchdayCount != ''){
-				// string format
-				var teams = localStorage.getItem(storageKey);
-
-				// to JSON
-				teams = JSON.parse(teams);
-
-				// to int
-				matchdayCount = parseInt(matchdayCount);
-
-				var postArguments = { 'ID': title, 'Title': title, 'MatchDayAmount': matchdayCount,	'Teams': teams };
-				console.log('Create league post arguments: ' + JSON.stringify(postArguments));
-
-				post('https://scoretables.herokuapp.com/api/leagues', postArguments);
-			}
-		}
-
-		function post(url, params){
-			var http = new XMLHttpRequest();
-			http.open("POST", url, true);
-
-			//Send the proper header information along with the request
-			http.setRequestHeader("Content-type", "application/json");
-
-			http.onreadystatechange = function() {//Call a function when the state changes.
-			    if(http.readyState == 4 && http.status == 200) {
-			        alert(http.responseText);
-			    }
-			}
-			http.send(params);
-		}
-
-
 		populateTeamsTable();
-
-
