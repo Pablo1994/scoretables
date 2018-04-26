@@ -39,6 +39,9 @@ DATABASE_NAME=scoretables</Environment>
     <Compile Include="models\matchdaymodule.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="models\teamrowmodule.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="routes\api.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\users.js" />
