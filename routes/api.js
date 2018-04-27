@@ -70,7 +70,7 @@ router.post('/leagues', function (req, res) {
         assert.equal(null, err);
         console.log("Connected correctly to database");
         const scoretablesdb = dbConnection.db(DATABASE_NAME);
-
+        
         console.log("Value of Body: " + JSON.stringify(req.body));
         assert.notEqual(req.body, null);
         console.log("Value of ID: " + req.body.ID);
@@ -157,7 +157,7 @@ router.get('/matchdays', function (req, res) {
 });
 
 /* GET a League. */
-router.get('/matchdays/:id', function (req, res) {
+router.get('/matchday/:id', function (req, res) {
 
     console.log('Received id: ' + req.params.id);
 
