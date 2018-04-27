@@ -22,11 +22,14 @@ block content
 	div(class='table-container' style='overflow-x:auto;')
 		table#leagueTeamsTable(style='width:100%', border='1')
 					
-	H2 Step 2: Create matchday
+	H2 Step 2: Add league info
 	form(action='#')
 		div.form-group
-			label(for='name') Name:
-			input#matchdayName.form-control(type='text', name='name')
+			label(for='id') ID:
+			input#matchdayId.form-control(type='text', name='id')
+		div.form-group
+			label(for='title') Title:
+			input#matchdayTitle.form-control(type='text', name='title')
 		div.form-group
 			label(for='matchdayCount') Matchday Count:
 			input#matchdayCount.form-control(type='text', name='matchDayCount')
@@ -125,28 +128,28 @@ block content
 			}
 		}
 
-		function createMatchDayFORMATRARE(){
-			var title = document.getElementById('matchdayName').value;
+		function createMatchDay(){
+			var id = document.getElementById('matchdayId').value;
+			var title = document.getElementById('matchdayTitle').value;
 			var matchdayCount = document.getElementById('matchdayCount').value;
 
-			if(title != '' && matchdayCount != ''){
+			if(id != '' && title != '' && matchdayCount != ''){
 				// string format
 				var teams = localStorage.getItem(storageKey);
 
 				// to JSON
 				teams = JSON.parse(teams);
 
+				var postArguments = { 'ID': id, 'Title': title, 'MatchDayAmount': parseInt(matchdayCount), 'Teams': teams };
 
-				var postArguments = { "ID":"testleague20", "Title":"Test League 1", "MatchDayAmount":5, "Teams": [ {"ID":"jarias", "Team": "Liverpool"}, {"ID":"snunez", "Team": "Man. City"}, {"ID":"snunez2", "Team": "Chelsea"}, {"ID":"snunez3", "Team": "Man. Utd"} ] };
-				//var postArguments = { 'ID': title, 'Title': title, 'MatchDayAmount': parseInt(matchdayCount), 'Teams': teams };
+				var jsonArguments = JSON.stringify(postArguments);
+				console.log('Create league post arguments: ' + jsonArguments);
 
-				console.log('Create league post arguments: ' + JSON.stringify(postArguments));
-			
 				return $.ajax({
 					type: "POST",
 					url: "https://scoretables.herokuapp.com/api/leagues",
-					data: postArguments,
-					dataType: "json",
+					data: jsonArguments,
+					contentType: "application/json",
 					success: function( respuesta ){
 						alert('success');
 					},
