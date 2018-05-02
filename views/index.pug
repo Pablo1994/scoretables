@@ -14,6 +14,9 @@ block content
 		div.form-group
 			label(for='team') Team:
 			input#team.form-control(type='text', name='team')
+		div.form-group
+			label(for='url') Image URL:
+			input#url.form-control(type='text', name='url')
 	button.btn.btn-primary(onclick='addTeamToList()') Add
 
 	H2 Teams
@@ -32,7 +35,7 @@ block content
 			input#matchdayTitle.form-control(type='text', name='title')
 		div.form-group
 			label(for='matchdayCount') Matchday Count:
-			input#matchdayCount.form-control(type='text', name='matchDayCount')
+			input#matchdayCount.form-control(type='text', name='matchdayCount')
 		
 	button.btn.btn-primary(onclick='createMatchDay()') Create Matchday
 
@@ -48,9 +51,11 @@ block content
 		var addTeamToList = function() {
 			var userName = document.getElementById('userName').value;
 			var team = document.getElementById('team').value;
-			var newPlayer = { 'ID': userName, 'Team': team };
+			var imageurl = document.getElementById('url').value;
 
-			if(userName != '' && team != '') {
+			if(userName != '' && team != '' && imageurl != '') {
+				var newPlayer = { 'ID': userName, 'Team': team, 'ImageURL': imageurl };
+
 				// Local Storage only support strings. So we need to use JSON.stringify() and JSON.parse()
 				// First, get the players, if there are not players yet, we will get null rather than an exception
 				var playersInStorage = localStorage.getItem(storageKey);
@@ -67,13 +72,16 @@ block content
 				localStorage.setItem(storageKey, JSON.stringify(players));
 
 				populateTeamsTable();
-
+				
+				console.log('New player was added: ' + JSON.stringify(players));
+			}
+			else{
+				console.log('Warning: All fields needed!');
 			}
 
 			document.getElementById('userName').value = '';
 			document.getElementById('team').value = '';
-			console.log('New player was added: ' + JSON.stringify(players));
-
+			document.getElementById('url').value = '';
 		}
 
 		Array.prototype.extend = function (other_array) {
@@ -97,24 +105,33 @@ block content
 			// Table title
 			var th1 = document.createElement('th');
 			var th2 = document.createElement('th');
+			var th3 = document.createElement('th');
 			th1.innerHTML = 'User';
 			th2.innerHTML = 'Team';
+			th3.innerHTML = 'Image';
 			table.appendChild(th1);
 			table.appendChild(th2);
+			table.appendChild(th3);
 
 			for (var i = 0; i < playersInStorage.length; i++){
 				var tr = document.createElement('tr');   
 
 				var td1 = document.createElement('td');
 				var td2 = document.createElement('td');
+				var td3 = document.createElement('td');
 
 				var text1 = document.createTextNode(playersInStorage[i].ID);
 				var text2 = document.createTextNode(playersInStorage[i].Team);
+				var image3 = document.createElement("IMG");
+				image3.src = playersInStorage[i].ImageURL;
+				image3.height = 100;
 
 				td1.appendChild(text1);
 				td2.appendChild(text2);
+				td3.appendChild(image3);
 				tr.appendChild(td1);
 				tr.appendChild(td2);
+				tr.appendChild(td3);
 
 				table.appendChild(tr);
 			}
@@ -147,6 +164,7 @@ block content
 
 				return $.ajax({
 					type: "POST",
+					//url: "http://localhost:1337/api/leagues",
 					url: "https://scoretables.herokuapp.com/api/leagues",
 					data: jsonArguments,
 					contentType: "application/json",
@@ -159,41 +177,5 @@ block content
 				});
 			}
 		}
-
-		var createMatchDay = function(){
-			var title = document.getElementById('matchdayName').value;
-			var matchdayCount = document.getElementById('matchdayCount').value;
-
-			if(title != '' && matchdayCount != ''){
-				// string format
-				var teams = localStorage.getItem(storageKey);
-
-				// to JSON
-				teams = JSON.parse(teams);
-
-				// to int
-				matchdayCount = parseInt(matchdayCount);
-
-				var postArguments = { 'ID': title, 'Title': title, 'MatchDayAmount': matchdayCount,	'Teams': teams };
-				console.log('Create league post arguments: ' + JSON.stringify(postArguments));
-
-				post('https://scoretables.herokuapp.com/api/leagues', postArguments);
-			}
-		}
-
-		function post(url, params){
-			var http = new XMLHttpRequest();
-			http.open("POST", url, true);
-
-			//Send the proper header information along with the request
-			http.setRequestHeader("Content-type", "application/json");
-
-			http.onreadystatechange = function() {//Call a function when the state changes.
-			    if(http.readyState == 4 && http.status == 200) {
-			        alert(http.responseText);
-			    }
-			}
-			http.send(params);
-		}
-
+		
 		populateTeamsTable();
