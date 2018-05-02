@@ -3,3 +3,5 @@ obj/Debug/scoretables.njsprojResolveAssemblyReference.cache
 obj/Debug/scoretables.njsproj.FileListAbsolute.txt
 obj/Debug/scoretables.njsproj.FileListAbsolute.txt
 obj/Debug/scoretables.njsprojResolveAssemblyReference.cache
+*.cache
+obj/Debug/scoretables.njsproj.FileListAbsolute.txt
