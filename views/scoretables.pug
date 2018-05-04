@@ -1,0 +1,88 @@
+﻿extends layout
+
+block content
+	// General Table
+	if scores
+		H1 General Table
+		div(class='table-container' style='overflow-x:auto;')
+			table(style='width:100%', border='1')
+				th Team
+				th MP
+				th W
+				th D
+				th L
+				th F
+				th A
+				th +/-
+				th Pts
+				for row in scores
+					tr
+						td= row.Name
+						td= row.PlayedMatches
+						td= row.Wins
+						td= row.Draws
+						td= row.Losses
+						td= row.GoalsInFavor
+						td= row.GoalsAgainst
+						td= row.GoalDifference
+						td= row.Points
+	else
+		H1 Please, create a league first.
+
+	// Schedule
+	if matchdays
+		H1 Schedule
+		div(class='table-container' style='overflow-x:auto;')
+			button(class="collapsible" onclick= 'collapse(this)') Show matches
+			table.schedule(class="content" style='width:98%')
+				th 
+				th 
+				th 
+					for matchday in matchdays
+						tr(style='border-bottom:#ccc') 
+							td(style='text-align:right')= matchday.HomeTeam.Team
+							if !matchday.HomeScore
+								td 
+									input(type="number" min="0" max="100")
+								td(style='text-align:center')   -  
+								td 
+									input(type="number" min="0" max="100")
+							else
+								td 
+									input(type="number" min="0" max="100" disabled="true" value=matchday.HomeScore)
+								td(style='text-align:center') -
+								td 
+									input(type="number" min="0" max="100" disabled="true" value=matchday.AwayScore)
+								td(style='text-align:left')= matchday.AwayTeam.Team
+								td
+									button(class="edit-result" onclick='editResult(this)') Edit
+						
+
+	// Scripts
+	script.
+		var something = function() { console.log('auch!')}
+		var collapse = function (element) {
+			element.classList.toggle("active");
+			var content = element.nextElementSibling;
+			if (content.style.display === "block") {
+				content.style.display = "none";
+			} else {
+				content.style.display = "block";
+			}
+		}
+		var editResult = function (button) {
+			if(button.textContent=="Edit"){
+				button.textContent="Save";
+				var table = button.parentElement.parentElement;
+				var tds = table.childNodes;
+				for(var i = 0; i < tds.length; i++){
+					if(tds[i].tagName=="TD"){
+						var child = tds[i].firstChild;
+						if(child.tagName=="input")
+							child.enabled=true;
+					}
+				}
+			} else {
+				button.textContent="Edit";
+			}
+		}
