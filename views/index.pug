@@ -14,6 +14,9 @@ block content
 		div.form-group
 			label(for='team') Team:
 			input#team.form-control(type='text', name='team')
+		div.form-group
+			label(for='url') Image URL:
+			input#url.form-control(type='text', name='url')
 	button.btn.btn-primary(onclick='addTeamToList()') Add
 
 	H2 Teams
@@ -22,14 +25,17 @@ block content
 	div(class='table-container' style='overflow-x:auto;')
 		table#leagueTeamsTable(style='width:100%', border='1')
 					
-	H2 Step 2: Create matchday
+	H2 Step 2: Add league info
 	form(action='#')
 		div.form-group
-			label(for='name') Name:
-			input#matchdayName.form-control(type='text', name='name')
+			label(for='id') ID:
+			input#matchdayId.form-control(type='text', name='id')
+		div.form-group
+			label(for='title') Title:
+			input#matchdayTitle.form-control(type='text', name='title')
 		div.form-group
 			label(for='matchdayCount') Matchday Count:
-			input#matchdayCount.form-control(type='text', name='matchDayCount')
+			input#matchdayCount.form-control(type='text', name='matchdayCount')
 		
 	button.btn.btn-primary(onclick='createMatchDay()') Create Matchday
 
@@ -45,9 +51,11 @@ block content
 		var addTeamToList = function() {
 			var userName = document.getElementById('userName').value;
 			var team = document.getElementById('team').value;
-			var newPlayer = { 'ID': userName, 'Team': team };
+			var imageurl = document.getElementById('url').value;
 
-			if(userName != '' && team != '') {
+			if(userName != '' && team != '' && imageurl != '') {
+				var newPlayer = { 'ID': userName, 'Team': team, 'ImageURL': imageurl };
+
 				// Local Storage only support strings. So we need to use JSON.stringify() and JSON.parse()
 				// First, get the players, if there are not players yet, we will get null rather than an exception
 				var playersInStorage = localStorage.getItem(storageKey);
@@ -64,13 +72,16 @@ block content
 				localStorage.setItem(storageKey, JSON.stringify(players));
 
 				populateTeamsTable();
-
+				
+				console.log('New player was added: ' + JSON.stringify(players));
+			}
+			else{
+				console.log('Warning: All fields needed!');
 			}
 
 			document.getElementById('userName').value = '';
 			document.getElementById('team').value = '';
-			console.log('New player was added: ' + JSON.stringify(players));
-
+			document.getElementById('url').value = '';
 		}
 
 		Array.prototype.extend = function (other_array) {
@@ -94,24 +105,33 @@ block content
 			// Table title
 			var th1 = document.createElement('th');
 			var th2 = document.createElement('th');
+			var th3 = document.createElement('th');
 			th1.innerHTML = 'User';
 			th2.innerHTML = 'Team';
+			th3.innerHTML = 'Image';
 			table.appendChild(th1);
 			table.appendChild(th2);
+			table.appendChild(th3);
 
 			for (var i = 0; i < playersInStorage.length; i++){
 				var tr = document.createElement('tr');   
 
 				var td1 = document.createElement('td');
 				var td2 = document.createElement('td');
+				var td3 = document.createElement('td');
 
 				var text1 = document.createTextNode(playersInStorage[i].ID);
 				var text2 = document.createTextNode(playersInStorage[i].Team);
+				var image3 = document.createElement("IMG");
+				image3.src = playersInStorage[i].ImageURL;
+				image3.height = 100;
 
 				td1.appendChild(text1);
 				td2.appendChild(text2);
+				td3.appendChild(image3);
 				tr.appendChild(td1);
 				tr.appendChild(td2);
+				tr.appendChild(td3);
 
 				table.appendChild(tr);
 			}
@@ -126,23 +146,25 @@ block content
 		}
 
 		function createMatchDay(){
-			var title = document.getElementById('matchdayName').value;
+			var id = document.getElementById('matchdayId').value;
+			var title = document.getElementById('matchdayTitle').value;
 			var matchdayCount = document.getElementById('matchdayCount').value;
 
-			if(title != '' && matchdayCount != ''){
+			if(id != '' && title != '' && matchdayCount != ''){
 				// string format
 				var teams = localStorage.getItem(storageKey);
 
 				// to JSON
 				teams = JSON.parse(teams);
 
-				var postArguments = { 'ID': title, 'Title': title, 'MatchDayAmount': parseInt(matchdayCount), 'Teams': teams };
+				var postArguments = { 'ID': id, 'Title': title, 'MatchDayAmount': parseInt(matchdayCount), 'Teams': teams };
 
 				var jsonArguments = JSON.stringify(postArguments);
 				console.log('Create league post arguments: ' + jsonArguments);
 
 				return $.ajax({
 					type: "POST",
+					//url: "http://localhost:1337/api/leagues",
 					url: "https://scoretables.herokuapp.com/api/leagues",
 					data: jsonArguments,
 					contentType: "application/json",
@@ -155,5 +177,5 @@ block content
 				});
 			}
 		}
-
+		
 		populateTeamsTable();

@@ -70,7 +70,7 @@ router.post('/leagues', function (req, res) {
         assert.equal(null, err);
         console.log("Connected correctly to database");
         const scoretablesdb = dbConnection.db(DATABASE_NAME);
-
+        
         console.log("Value of Body: " + JSON.stringify(req.body));
         assert.notEqual(req.body, null);
         console.log("Value of ID: " + req.body.ID);
@@ -299,31 +299,33 @@ router.get("/scoretables/:id", function (req, res) {
         var leagueID = req.params.id;
 
         findOneLeague(scoretablesdb, { "ID": leagueID }, function (result) {
-            var teams = result.Teams;
+            if (result != null) {
+                var teams = result.Teams;
 
-            findMatches(scoretablesdb, { "LeagueID": result.ID }, function (result) {
-                var matches = result;
-                var rows = assignStats(teams, matches);
+                findMatches(scoretablesdb, { "LeagueID": result.ID }, function (result) {
+                    var matches = result;
+                    var rows = assignStats(teams, matches);
 
-                var result = rows.sort(function (a, b) {
-                    var aPoints = a.Points;
-                    var bPoints = b.Points;
-                    var aGoalDifference = a.GoalDifference;
-                    var bGoalDifference = b.GoalDifference;
-                    console.log(aGoalDifference + " | " + bGoalDifference);
+                    var result = rows.sort(function (a, b) {
+                        var aPoints = a.Points;
+                        var bPoints = b.Points;
+                        var aGoalDifference = a.GoalDifference;
+                        var bGoalDifference = b.GoalDifference;
+                        console.log(aGoalDifference + " | " + bGoalDifference);
 
-                    if (bPoints == aPoints) {
-                        return (aGoalDifference > bGoalDifference) ? -1 :
-                            (aGoalDifference < bGoalDifference) ? 1 : 0;
-                    }
-                    else {
-                        return (aPoints > bPoints) ? -1 : 1;
-                    }
+                        if (bPoints == aPoints) {
+                            return (aGoalDifference > bGoalDifference) ? -1 :
+                                (aGoalDifference < bGoalDifference) ? 1 : 0;
+                        }
+                        else {
+                            return (aPoints > bPoints) ? -1 : 1;
+                        }
+                    });
+
+                    res.send(result);
+                    dbConnection.close();
                 });
-
-                res.send(result);
-                dbConnection.close();
-            });
+            }
         });
     });
 });

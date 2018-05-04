@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var assert = require('assert');
 var routes = require('./routes/index');
+var scoretables = require('./routes/scoretables');
 var users = require('./routes/users');
 var apiMethods = require('./routes/api');
 
@@ -32,6 +33,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+app.use('/table', scoretables);
 //app.use('/users', users);
 app.use('/api', apiMethods);
 

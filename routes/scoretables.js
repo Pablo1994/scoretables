@@ -7,7 +7,7 @@ function getLeague(leagueid) {
     // Setting URL and headers for request
     var options = {
         url: 'http://scoretables.herokuapp.com/api/leagues/' + leagueid,
-        // proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
+        proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
         headers: {
             'User-Agent': 'request'
         }
@@ -30,7 +30,7 @@ function getScoreTables(leagueid) {
     // Setting URL and headers for request
     var options = {
         url: 'http://scoretables.herokuapp.com/api/scoretables/' + leagueid,
-        //   proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
+        proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
         headers: {
             'User-Agent': 'request'
         }
@@ -52,8 +52,8 @@ function getScoreTables(leagueid) {
 function getMatchDays(leagueid) {
     // Setting URL and headers for request
     var options = {
-        url: 'http://localhost:1337/api/matchdays/' + leagueid,
-        //proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
+        url: 'http://scoretables.herokuapp.com/api/matchdays/' + leagueid,
+        proxy: 'http://proxy-atc.atlanta.hp.com:8080 ',				// Comment or remove this line when uploading code
         headers: {
             'User-Agent': 'request'
         }
@@ -73,31 +73,6 @@ function getMatchDays(leagueid) {
 }
 
 // GET home page. 
-router.get('/', function (req, res) {
-
-    // Create league options.
-    res.render('index', {
-        title: "Score Table",
-        league: null
-    });
-
-    //var initializePromise = initialize(null);
-    //   initializePromise.then(function(result) {
-
-    //       // Success
-    //       res.render('index', {
-    //           title: "Score Table",
-    //           league: result,
-
-    //       });
-
-    //    console.log("Successfully retrieved league data");
-    //   }, function(err) {
-    //       console.log(err);
-    //   })
-});
-
-// GET home page. 
 router.get('/:id', function (req, res) {
 
     console.log('Received id: ' + req.params.id);
@@ -111,7 +86,7 @@ router.get('/:id', function (req, res) {
             var getMatchDaysPromise = getMatchDays(req.params.id);
             getMatchDaysPromise.then(function (matchdays) {
                 // Success request, show league data.
-                res.render('index', {
+                res.render('scoretables', {
                     title: "Score Table",
                     league: result,
                     scores: scores,
@@ -121,7 +96,7 @@ router.get('/:id', function (req, res) {
                 console.log("Successfully retrieved league data");
             }, function (err) {
                 // Create league options.
-                res.render('index', {
+                res.render('scoretables', {
                     title: "Score Table",
                     league: null
                 });
@@ -130,7 +105,7 @@ router.get('/:id', function (req, res) {
             })
         }, function (err) {
             // Create league options.
-            res.render('index', {
+            res.render('scoretables', {
                 title: "Score Table",
                 league: null
             });
@@ -139,7 +114,7 @@ router.get('/:id', function (req, res) {
         })
     }, function (err) {
         // Create league options.
-        res.render('index', {
+        res.render('scoretables', {
             title: "Score Table",
             league: null
         });
