@@ -35,6 +35,7 @@ th{
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    margin-bottom: 28px;
 }
 
 h1{
@@ -73,4 +74,7 @@ h1{
 
 input {
     text-align: center;
+}
+form{
+    margin: 20px;
 }
