@@ -41,7 +41,7 @@ block content
 					for matchday in matchdays
 						tr(style='border-bottom:#ccc') 
 							td(style='text-align:right')= matchday.HomeTeam.Team
-							if !matchday.HomeScore && !matchday.AwayScore
+							if matchday.HomeScore != null && matchday.AwayScore != null
 								td 
 									input(type="number" min="0" max="100")
 								td(style='text-align:center')   -  
