@@ -1,3 +1,0 @@
-C:\SE\PY\scoretables\obj\Debug\scoretables.njsproj.CoreCompileInputs.cache
-C:\SE\PY\scoretables\bin\Microsoft.NodejsTools.WebRole.dll
-C:\SE\PY\scoretables\obj\Debug\scoretables.njsprojResolveAssemblyReference.cache

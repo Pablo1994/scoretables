@@ -7,7 +7,8 @@
     <RootNamespace>scoretables</RootNamespace>
     <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
     <Environment>MONGODB_URI=mongodb://localhost:27017/scoretables
-DATABASE_NAME=scoretables</Environment>
+DATABASE_NAME=scoretables
+DEBUG_FLAG=false</Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
