@@ -4,6 +4,8 @@ var router = express.Router();
 const mongoMod = require('../../modules/mongomod');
 const leagueMod = require('../../modules/leaguesmod');
 
+//#region Helper methods
+
 // Helper method to get a good connection to DB or gracefully failover.
 async function getConnectionObjects(res) {
     try { return await mongoMod.connect(); }
@@ -24,6 +26,8 @@ function bad(res, message) {
     res.statusCode = 400;
     res.send(message);
 }
+
+//#endregion Helper methods
 
 //#region Router methods
 
