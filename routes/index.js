@@ -7,10 +7,15 @@ var request = require('request');
 router.get('/', function (req, res) {
 
     // Create league options.
-    res.render('index', {
-        title: "Score Table",
-        league: null
-    });
+    
+    // res.render('index', {
+    //     title: "Score Table",
+    //     league: null
+    // });
+
+    const message = 'No view available.'
+    console.log(message)
+    res.send(message)
 });
 
 module.exports = router;
