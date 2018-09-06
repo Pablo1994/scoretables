@@ -6,7 +6,7 @@ const globalConfigPath = path.join(__dirname, 'globalConfig.json');
 // MongoDB version needs to be equal to one on mlab.com
 const mongod = new MongodbMemoryServer.default({
     instance: {
-        dbName: 'jest'
+        dbName: 'jest-scoretables'
     },
     binary: {
         version: '3.6.6'
@@ -15,7 +15,7 @@ const mongod = new MongodbMemoryServer.default({
 
 module.exports = async function () {
     const mongoConfig = {
-        mongoDBName: 'jest',
+        mongoDBName: 'jest-scoretables',
         mongoUri: await mongod.getConnectionString()
     };
 
