@@ -6,11 +6,12 @@
     "node": "8.11.1"
   },
   "scripts": {
-    "start": "node app"
+    "start": "node app",
+    "test": "jest"
   },
   "description": "scoretables",
   "author": {
-    "name": "Sergio"
+    "name": "CPE team"
   },
   "dependencies": {
     "body-parser": "^1.15.0",
