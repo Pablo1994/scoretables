@@ -7,22 +7,24 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var assert = require('assert');
-var routes = require('./routes/index');
-var scoretables = require('./routes/scoretables');
-var users = require('./routes/users');
-var apiMethods = require('./routes/api');
 
-var MongoClient = require('mongodb').MongoClient;
+var routes = require('./routes/index');
+var api = require('./routes/api/api');
+var leagues = require('./routes/api/leagues');
+var matchdays = require('./routes/api/matchdays');
+//var scoretables = require('./routes/api/scoretables');
+var scoretablesView = require('./routes/scoretables');
+
+const mongoMod = require('./modules/mongomod');
 
 // Connection URL
-const mongoURL = process.env.MONGODB_URI;
 const PORT = process.env.PORT || 3000;
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+// app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -33,9 +35,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/table', scoretables);
-//app.use('/users', users);
-app.use('/api', apiMethods);
+app.use('/table', scoretablesView);
+app.use('/api', api);
+app.use('/api/leagues', leagues);
+app.use('/api/matchdays', matchdays);
+//app.use('/api/scoretables', scoretables);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -70,19 +74,20 @@ app.use(function (err, req, res, next) {
 
 app.set('port', PORT);
 
-var server = app.listen(app.get('port'), function () {
-    debug('Express server listening on port ' + server.address().port);
-    console.log('Express server listening on port ' + server.address().port);
-
-    // Use connect method to connect to the Server
-
-    MongoClient.connect(mongoURL, function (err, db) {
-        assert.equal(null, err);
-        console.log("Connected correctly to database");
-
-        db.close();
-    });
-
+var server = app.listen(PORT, async function () {
+    debug('Express server listening on port ' + PORT);
+    console.log('Express server listening on port ' + PORT);
 
     console.log(`Worker ${process.pid} started`);
+
+    try {
+        const connection = await mongoMod.connect();
+        const message = 'Connected to server';
+        console.log(message);
+
+        connection.close();
+    }
+    catch (error) {
+        console.log(error);
+    }
 });
