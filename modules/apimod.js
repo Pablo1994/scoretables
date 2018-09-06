@@ -2,7 +2,7 @@
 var assert = require('assert');
 
 exports.basicTest = () => {
-    const message = 'Service Online';
+    const message = 'Service 2.0 Online';
     console.log(message);
 };
 
