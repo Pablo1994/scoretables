@@ -2,18 +2,16 @@
 var debug = require('debug');
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
+// var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var assert = require('assert');
 
 var routes = require('./routes/index');
 var api = require('./routes/api/api');
 var leagues = require('./routes/api/leagues');
 var matchdays = require('./routes/api/matchdays');
-//var scoretables = require('./routes/api/scoretables');
-var scoretablesView = require('./routes/scoretables');
+var scoretables = require('./routes/api/scoretables');
 
 const mongoMod = require('./modules/mongomod');
 
@@ -35,11 +33,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/table', scoretablesView);
 app.use('/api', api);
 app.use('/api/leagues', leagues);
 app.use('/api/matchdays', matchdays);
-//app.use('/api/scoretables', scoretables);
+app.use('/api/scoretables', scoretables);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

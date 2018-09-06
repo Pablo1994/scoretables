@@ -1,6 +1,6 @@
 'use strict';
 //const assert = require('assert');
-const matchdayMod = require('../modules/matchdaymod');
+const matchdayMod = require('./matchdaymod');
 const MatchDay = require('../models/matchdaymodule');
 const League = require('../models/leaguemodule');
 

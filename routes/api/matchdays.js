@@ -6,7 +6,7 @@ const MatchDay = require('../../models/matchdaymodule');
 const matchdayMod = require('../../modules/matchdaymod');
 const mongoMod = require('../../modules/mongomod');
 
-var debug = process.env.DEBUG_FLAG;
+//#region Helper methods
 
 // Helper method to get a good connection to DB or gracefully failover.
 async function getConnectionObjects(res) {
@@ -28,6 +28,8 @@ function bad(res, message) {
     res.statusCode = 400;
     res.send(message);
 }
+
+//#endregion Helper methods
 
 //#region Router methods
 
@@ -84,12 +86,12 @@ router.get('/league/:leagueid/:count', async function (req, res) {
 });
 
 /* PUT to update a MatchDay. */
-router.put('/:id', async function (req, res) {
+router.put('/:id/:homescore/:awayscore', async function (req, res) {
     const conObjects = await getConnectionObjects(res);
 
     console.log('Received id: ' + req.params.id);
 
-    const result = await matchdayMod.updateById(conObjects, req.params.id, req.body.HomeScore, req.body.AwayScore);
+    const result = await matchdayMod.updateById(conObjects, req.params.id, req.params.homescore, req.params.awayscore);
 
     ok(res, result);
 

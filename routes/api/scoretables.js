@@ -1,8 +1,8 @@
-﻿'use strict';
+'use strict';
 var express = require('express');
 var router = express.Router();
-const apiMod = require('../../modules/apimod');
 const mongoMod = require('../../modules/mongomod');
+const scoretablesMod = require('../../modules/scoretablesmod');
 
 //#region Helper methods
 
@@ -31,19 +31,21 @@ function bad(res, message) {
 
 //#region Router methods
 
-/* GET simple service online test. */
-router.get('/test', function (req, res) {
-    ok(res, apiMod.basicTest());
-});
-
-/* GET simple database connectivity test. */
-router.get('/testdb', async function (req, res) {
+router.get("/:id", async function (req, res) {
     const conObjects = await getConnectionObjects(res);
 
-    ok(res, apiMod.basicTestDB(conObjects.connection));
+    console.log('Received id: ' + req.params.id);
+
+    const table = await scoretablesMod.getByLeague(conObjects, req.params.id);
+
+    if (table) {
+        ok(res, table);
+    }
+    else{
+        bad(res, 'No league found with that ID');
+    }
 
     conObjects.close();
-    return true;
 });
 
 //#endregion Router methods
